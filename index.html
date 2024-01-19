@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: #fff;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #ff8c00;
+        }
+
+        label {
+            color: #eee;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #333;
+            background-color: #333;
+            color: #fff;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            var users = [
+                { username: 'Venki', password: 'VenkiGowda' },
+                { username: 'RajKumar', password: 'rajkumar@123' },
+                { username: 'unknownuser', password: 'HappyDay#23' },
+                { username: 'UserKnown', password: 'SilverMoon33' },
+                { username: 'srinivasapharmaceuticals', password: 'Srinivasa@123Pharmaceuticals' },
+                { username: 'RegularUser', password: 'Iamregular@1234' },
+                // Add more users as needed
+            ];
+
+            var isValidUser = users.some(user => user.username === username && user.password === password);
+
+            if (isValidUser) {
+                alert('Login successful!');
+                // Redirect to the specified HTML file after successful login
+                window.location.href = 'completed.html';
+            } else {
+                alert('Invalid username or password');
+            }
+
+            // Prevent form submission (this is just for demonstration, not secure)
+            return false;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Srinivasa Pharmaceuticals</h2>
+       <h2>Login</h2>
+        <form onsubmit="return login()">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+</body>
+</html>
