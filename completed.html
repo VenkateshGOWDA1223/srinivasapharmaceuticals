@@ -283,6 +283,96 @@ h1 {
         </address>
     </section>
 <div class="copyright">
-    <p>&copy; 2024Srinivasa Pharmaceuticals. All rights reserved.</p>
+    <p>&copy; 2024 Srinivasa Pharmaceuticals. All rights reserved.</p>
 </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding Advertisement Section</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .advertisement-section {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 300px;
+            display: flex;
+        }
+
+        .advertisement-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .advertisement {
+            flex: 1;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .advertisement:nth-child(1) {
+            background-image: url('"C:\Users\venkatesh gowda\OneDrive\Pictures\Screenshots\online order.jpg"'); /* Replace 'ad1.jpg' with the path to your first ad image */
+        }
+
+        .advertisement:nth-child(2) {
+            background-image: url('C:\Users\venkatesh gowda\OneDrive\Pictures\Screenshots\online order (1).jpg'); /* Replace 'ad2.jpg' with the path to your second ad image */
+        }
+
+        .advertisement:nth-child(3) {
+            background-image: url('C:\Users\venkatesh gowda\OneDrive\Pictures\Screenshots\online order (2).jpg'); /* Replace 'ad3.jpg' with the path to your third ad image */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="advertisement-section">
+        <div class="advertisement-wrapper">
+            <div class="advertisement">
+                <p>Advertisement 1</p>
+                <a href="https://example.com/ad1" target="_blank">Click Here</a>
+            </div>
+            <div class="advertisement">
+                <p>Advertisement 2</p>
+                <a href="https://example.com/ad2" target="_blank"></a>
+            </div>
+            <div class="advertisement">
+                <p>Advertisement 3</p>
+                <a href="https://example.com/ad3" target="_blank"></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var wrapper = document.querySelector('.advertisement-wrapper');
+            var advertisementWidth = document.querySelector('.advertisement').offsetWidth;
+            var currentIndex = 0;
+
+            function nextAdvertisement() {
+                currentIndex = (currentIndex + 1) % wrapper.children.length;
+                updateAdvertisementSlider();
+            }
+
+            function updateAdvertisementSlider() {
+                wrapper.style.transform = 'translateX(' + (-currentIndex * advertisementWidth) + 'px)';
+            }
+
+            setInterval(nextAdvertisement, 6000); // Change advertisement every 3 seconds
+        });
+    </script>
+</body>
 </html>
