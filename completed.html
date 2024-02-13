@@ -382,6 +382,114 @@ h1 {
 <a href="https://www.livechatinc.com/chat-with/17087412/" rel="nofollow">Chat with us</a>,
 powered by <a href="https://www.livechatinc.com/?welcome" rel="noopener nofollow" target="_blank">LiveChat</a>
 </noscript>
+        <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Payment Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 40px 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #005a87;
+            margin-bottom: 30px;
+        }
+
+        #payBtn {
+            background-color: #008cba;
+            color: white;
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+            margin-top: 20px;
+        }
+
+        #payBtn:hover {
+            background-color: #007ba7;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #paymentDetails {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #qrcode img {
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 200px; /* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .payment-info {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .payment-info strong {
+            color: #005a87;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Medical Bill Payment</h2>
+    <p>Securely pay your medical bills with ease.</p>
+
+    <button id="payBtn" onclick="togglePaymentDetails()">Pay Now</button>
+
+    <div id="paymentDetails">
+        <h3>Payment Information</h3>
+        <div class="payment-info">
+            <p><strong>UPI ID:</strong> <span id="upiId">-------------------------------</span></p>
+            <p>Scan the QR code below or click the UPI ID to pay with your UPI app.</p>
+        </div>
+        <div id="qrcode">
+            <!-- Replace 'path_to_your_qr_code_image' with the actual path to your QR code image -->
+            <img src="images\Cream and Green Minimalist QR Code Flyer.jpg" alt="QR Code">
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePaymentDetails() {
+        var paymentDetails = document.getElementById('paymentDetails');
+        if (paymentDetails.style.display === "none" || paymentDetails.style.display === "") {
+            paymentDetails.style.display = 'block';
+        } else {
+            paymentDetails.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
 <body>
     <a href="https://venkateshgowda1223.github.io/chatbot/" class="chat-button"><span>Click here to chat with chatbot</span></a>
 </body>
