@@ -277,6 +277,34 @@ h1 {
             E-mail: srinivasapharmaceuticals9@gmail.com
         </address>
     </section>
+<body>
+<div class="container">
+    <h2>Medical Bill Payment</h2>
+    <p>Securely pay your medical bills with ease.</p>
+    <button id="payBtn" onclick="togglePaymentDetails()">Pay Now</button>
+    <div id="paymentDetails">
+        <h3>Payment Information</h3>
+        <div class="payment-info">
+            <p><strong>UPI ID:</strong> <span id="upiId">-------------------------------</span></p>
+            <p>Scan the QR code below or click the UPI ID to pay with your UPI app.</p>
+        </div>
+        <div id="qrcode">
+            <!-- Replace 'path_to_your_qr_code_image' with the actual path to your QR code image -->
+            <img src="images\Cream and Green Minimalist QR Code Flyer.jpg" alt="QR Code">
+        </div>
+    </div>
+</div>
+<script>
+    function togglePaymentDetails() {
+        var paymentDetails = document.getElementById('paymentDetails');
+        if (paymentDetails.style.display === "none" || paymentDetails.style.display === "") {
+            paymentDetails.style.display = 'block';
+        } else {
+            paymentDetails.style.display = 'none';
+        }
+    }
+</script>
+</body>
     <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -433,34 +461,6 @@ powered by <a href="https://www.livechatinc.com/?welcome" rel="noopener nofollow
         }
     </style>
 </head>
-<body>
-<div class="container">
-    <h2>Medical Bill Payment</h2>
-    <p>Securely pay your medical bills with ease.</p>
-    <button id="payBtn" onclick="togglePaymentDetails()">Pay Now</button>
-    <div id="paymentDetails">
-        <h3>Payment Information</h3>
-        <div class="payment-info">
-            <p><strong>UPI ID:</strong> <span id="upiId">-------------------------------</span></p>
-            <p>Scan the QR code below or click the UPI ID to pay with your UPI app.</p>
-        </div>
-        <div id="qrcode">
-            <!-- Replace 'path_to_your_qr_code_image' with the actual path to your QR code image -->
-            <img src="images\Cream and Green Minimalist QR Code Flyer.jpg" alt="QR Code">
-        </div>
-    </div>
-</div>
-<script>
-    function togglePaymentDetails() {
-        var paymentDetails = document.getElementById('paymentDetails');
-        if (paymentDetails.style.display === "none" || paymentDetails.style.display === "") {
-            paymentDetails.style.display = 'block';
-        } else {
-            paymentDetails.style.display = 'none';
-        }
-    }
-</script>
-</body>
 <body>
     <a href="https://venkateshgowda1223.github.io/chatbot/" class="chat-button"><span>Click here to chat with chatbot</span></a>
 </body>
