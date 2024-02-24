@@ -2,106 +2,137 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Srinivasa Pharmaceuticals</title>
+    <title>Sign In and Sign Up</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(to right, #141e30, #243b55);
-            color: #fff;
         }
-
         .container {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            background: white;
             padding: 20px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
-            text-align: center;
+            display: none; /* Initially hide containers */
         }
-
         h2 {
-            color: #ff8c00;
+            text-align: center;
+            color: #333;
         }
-
-        label {
-            color: #eee;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input {
+        input[type=email], input[type=password], button {
             width: 100%;
             padding: 10px;
-            margin-bottom: 16px;
-            box-sizing: border-box;
-            border: 1px solid #333;
-            background-color: #333;
-            color: #fff;
-            border-radius: 4px;
-            outline: none;
+            margin: 10px 0;
+            border-radius: 5px;
         }
-
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: #fff;
+        input[type=email], input[type=password] {
+            border: 1px solid #ddd;
+        }
+        button {
+            border: none;
+            background-color: #0056b3;
+            color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-
-        input[type="submit"]:hover {
-            background-color: #45a049;
+        button:hover {
+            background-color: #004494;
         }
-
-        .logo {
-            width: 150px;
-            margin-bottom: 20px;
+        .message {
+            color: #0066cc;
+            cursor: pointer;
+            text-align: center;
         }
     </style>
-    <script>
-        function login() {
-            var username = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
-            var users = [
-                { username: 'Venki', password: 'VenkiGowda' },
-                { username: 'RajKumar', password: 'rajkumar@123' },
-                { username: 'unknownuser', password: 'HappyDay#23' },
-                { username: 'UserKnown', password: 'SilverMoon33' },
-                { username: 'srinivasapharmaceuticals', password: 'Srinivasa@123Pharmaceuticals' },
-                { username: 'RegularUser', password: 'Iamregular@1234' },
-                // Add more users as needed
-            ];
-            var isValidUser = users.some(user => user.username === username && user.password === password);
-            if (isValidUser) {
-                alert('Login successful!');
-                window.location.href = 'completed.html';
-            } else {
-                alert('Invalid username or password');
+        // Firebase configuration
+       const firebaseConfig = {
+            apiKey: "AIzaSyDNrI34rs5w2UD_C1GzYnYnDtgbw4W8r4E",
+            authDomain: "authentication-50ab8.firebaseapp.com",
+            projectId: "authentication-50ab8",
+            storageBucket: "authentication-50ab8.appspot.com",
+            messagingSenderId: "760013774004",
+            appId: "1:760013774004:web:499d0db962bd8b98c70be1"
+        };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Sign Up function
+        window.signup = async function() {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                await sendEmailVerification(user);
+                alert("Verification email sent. Please check your inbox.");
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
             }
-            return false;
+        }
+
+        // Sign In function
+        window.signin = async function() {
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                if(user.emailVerified) {
+                    window.location.href = "completed.html"; // Redirect after sign in
+                } else {
+                    alert("Please verify your email first.");
+                }
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
+        }
+
+        // Toggle between Sign In and Sign Up forms
+        window.toggleForms = function() {
+            const signInForm = document.getElementById('sign-in-form');
+            const signUpForm = document.getElementById('sign-up-form');
+            if (signInForm.style.display === "block") {
+                signInForm.style.display = "none";
+                signUpForm.style.display = "block";
+            } else {
+                signInForm.style.display = "block";
+                signUpForm.style.display = "none";
+            }
         }
     </script>
 </head>
 <body>
-    <div class="container">
-        <img src="images\logo.png" alt="Srinivasa Pharmaceuticals Logo" class="logo">
-        <h2>Login</h2>
-        <form onsubmit="return login()">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br>
-            <input type="submit" value="Login">
-        </form>
-    </div>
+
+<div id="sign-up-form" class="container" style="display: none;">
+    <h2>Sign Up</h2>
+    <input type="email" id="signup-email" placeholder="Email">
+    <input type="password" id="signup-password" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+    <p class="message" onclick="toggleForms()">Already have an account? Sign in</p>
+</div>
+
+<div id="sign-in-form" class="container" style="display: block;">
+    <h2>Sign In</h2>
+    <input type="email" id="signin-email" placeholder="Email">
+    <input type="password" id="signin-password" placeholder="Password">
+    <button onclick="signin()">Sign In</button>
+    <p class="message" onclick="toggleForms()">New user? Sign up</p>
+</div>
+
 </body>
 </html>
