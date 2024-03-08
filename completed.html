@@ -222,47 +222,60 @@ h1 {
     </style>
 </head>
 <section id="orders">
-<h2>Orders</h2>
-<form id="my-form" action="https://formspree.io/f/xzbnzqna" method="POST">
-  <label>SHOP NAME:</label>
-  <input type="name" name="name" required>
- <label>ORDERS:</label>
- <input type="text" name="message" required>
-  <button id="my-form-button">Submit</button>
-  <p id="my-form-status"></p>
-</form>
-<!-- Place this script at the end of the body tag -->
-<script>
-    var form = document.getElementById("my-form");    
-    async function handleSubmit(event) {
-      event.preventDefault();
-      var status = document.getElementById("my-form-status");
-      var data = new FormData(event.target);
-      fetch(event.target.action, {
-        method: form.method,
-        body: data,
-        headers: {
-            'Accept': 'application/json'
-        }
-      }).then(response => {
-        if (response.ok) {
-          status.innerHTML = "Your Order has been successfully submitted! We will review your order shortly.Regards,SRINIVASA PHARMACEUTICALS";
-          form.reset()
-        } else {
-          response.json().then(data => {
-            if (Object.hasOwn(data, 'errors')) {
-              status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
-            } else {
-              status.innerHTML = "Oops! There was a problem submitting your form"
-            }
-          })
-        }
-      }).catch(error => {
-        status.innerHTML = "Oops! There was a problem submitting your form"
-      });
-    }
-    form.addEventListener("submit", handleSubmit)
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Button Example</title>
+<style>
+  /* Basic Reset */
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Centering Content */
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+  }
+
+  /* Button Styling */
+  .order-button {
+    background-color: #008CBA; /* Blue background */
+    border: none;
+    color: white; /* White text */
+    padding: 15px 32px; /* Top and bottom padding, Left and right padding */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+  }
+
+  /* Hover Effect */
+  .order-button:hover {
+    background-color: #005f73; /* Darker shade of button color on hover */
+    transform: scale(1.05); /* Slightly increase button size */
+    cursor: pointer; /* Change cursor to indicate clickable */
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="https://venkateshgowda1223.github.io/ordersonline/" class="order-button">Click Here to Order</a>
+</div>
+
+</body>
+</html>
+
     </section>
 </body>
 <body>
