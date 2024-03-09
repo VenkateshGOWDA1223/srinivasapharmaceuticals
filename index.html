@@ -125,7 +125,7 @@
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             if (userCredential.user.emailVerified) {
-                // Redirect or perform actions after successful login
+                window.location.href = "completed.html";
                 console.log("Signed in with email: ", email);
                 alert("Successfully signed in!");
             } else {
