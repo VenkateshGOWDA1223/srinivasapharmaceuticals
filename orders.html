@@ -92,7 +92,7 @@
             <form id="order-form">
                 <div class="form-group">
                     <label for="customer-name">Your Shop Name:</label>
-                    <input type="text" id="customer-name" required>
+                    <input type="text" id="customer-name" required readonly>
                 </div>
                 <div class="form-group">
                     <label for="order-details">Order Details:</label>
@@ -109,8 +109,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
     <script>
-        // Your web app's Firebase configuration
-       const firebaseConfig = {
+        // Your web app's Firebase configuration (unchanged from your original script)
+      const firebaseConfig = {
   apiKey: "AIzaSyBloD2f97f6wOhnz0jALQ7slM-CJaSpNuE",
   authDomain: "contactform-8ea25.firebaseapp.com",
   databaseURL: "https://contactform-8ea25-default-rtdb.firebaseio.com",
@@ -120,11 +120,17 @@
   appId: "1:416188748735:web:7793c830036bc4df89c70a"
 };
 
-
-        // Initialize Firebase
+        // Initialize Firebase (unchanged from your original script)
         firebase.initializeApp(firebaseConfig);
-        // Initialize Firestore
         const db = firebase.firestore();
+
+        // Load username from local storage and set it as readonly
+        window.onload = function() {
+            const username = localStorage.getItem('username'); // Assuming 'username' is stored in local storage during login/signup
+            if(username) {
+                document.getElementById('customer-name').value = username;
+            }
+        };
 
         document.getElementById('order-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -154,3 +160,4 @@
     </script>
 </body>
 </html>
+
