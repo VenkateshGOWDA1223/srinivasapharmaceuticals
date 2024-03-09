@@ -24,13 +24,13 @@
             text-align: center;
             color: #333;
         }
-        input[type=text], input[type=email], input[type=password], button {
+        input[type=email], input[type=password], button {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
         }
-        input[type=text], input[type=email], input[type=password] {
+        input[type=email], input[type=password] {
             border: 1px solid #ddd;
         }
         button {
@@ -48,43 +48,17 @@
             text-align: center;
         }
     </style>
-</head>
-<body>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            sendEmailVerification,
+            sendPasswordResetEmail
+        } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
-<div id="sign-up-form" class="container" style="display: none;">
-    <h2>Sign Up</h2>
-    <input type="text" id="signup-username" placeholder="Username">
-    <input type="email" id="signup-email" placeholder="Email">
-    <input type="password" id="signup-password" placeholder="Password">
-    <button onclick="signup()">Sign Up</button>
-    <p class="message" onclick="toggleForms()">Already registered? Sign in</p>
-</div>
-
-<div id="sign-in-form" class="container">
-    <h2>Sign In</h2>
-    <input type="email" id="signin-email" placeholder="Email">
-    <input type="password" id="signin-password" placeholder="Password">
-    <button onclick="signin()">Sign In</button>
-    <p class="forgot-password" onclick="forgotPassword()">Forgot password?</p>
-    <p class="message" onclick="toggleForms()">New here? Sign up</p>
-</div>
-
-<script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-    import {
-        getAuth,
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword,
-        sendEmailVerification,
-        sendPasswordResetEmail
-    } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
-    import {
-        getFirestore,
-        doc,
-        setDoc
-    } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
-
-     const firebaseConfig = {
+       const firebaseConfig = {
             apiKey: "AIzaSyDNrI34rs5w2UD_C1GzYnYnDtgbw4W8r4E",
             authDomain: "authentication-50ab8.firebaseapp.com",
             projectId: "authentication-50ab8",
@@ -93,76 +67,86 @@
             appId: "1:760013774004:web:499d0db962bd8b98c70be1"
         };
 
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    window.signup = async function() {
-        const username = document.getElementById('signup-username').value;
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            console.log("User created: ", userCredential.user);
-            alert("Verification email sent. Please check your inbox.");
-            await sendEmailVerification(userCredential.user);
-
-            // Save additional user info in Firestore
-            await setDoc(doc(db, "users", userCredential.user.uid), {
-                username: username,
-                email: email
-            });
-        } catch (error) {
-            console.error(error);
-            alert(error.message);
-        }
-    };
-
-    window.signin = async function() {
-        const email = document.getElementById('signin-email').value;
-        const password = document.getElementById('signin-password').value;
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            if (userCredential.user.emailVerified) {
-                window.location.href = "completed.html";
-                console.log("Signed in with email: ", email);
-                alert("Successfully signed in!");
-            } else {
-                alert("Please verify your email first.");
+        window.signup = async function() {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                await sendEmailVerification(user);
+                alert("Verification email sent. Please check your inbox.");
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
             }
-        } catch (error) {
-            console.error(error);
-            alert(error.message);
         }
-    };
 
-    window.forgotPassword = async function() {
-        const email = document.getElementById('signin-email').value;
-        if (!email) {
-            alert("Please enter your email address.");
-            return;
+        window.signin = async function() {
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                if(user.emailVerified) {
+                    window.location.href = "completed.html";
+                } else {
+                    alert("Please verify your email first.");
+                }
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
         }
-        try {
-            await sendPasswordResetEmail(auth, email);
-            alert("Password reset email sent. Please check your inbox.");
-        } catch (error) {
-            console.error(error);
-            alert(error.message);
-        }
-    };
 
-    window.toggleForms = function() {
-        const signInForm = document.getElementById('sign-in-form');
-        const signUpForm = document.getElementById('sign-up-form');
-        if (signInForm.style.display === "block") {
-            signInForm.style.display = "none";
-            signUpForm.style.display = "block";
-        } else {
-            signInForm.style.display = "block";
-            signUpForm.style.display = "none";
+        window.forgotPassword = async function() {
+            const email = document.getElementById('signin-email').value;
+            if (!email) {
+                alert("Please enter your email address.");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert("Password reset email sent. Please check your inbox.");
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
         }
-    };
-</script>
+
+        window.toggleForms = function() {
+            const signInForm = document.getElementById('sign-in-form');
+            const signUpForm = document.getElementById('sign-up-form');
+            if (signInForm.style.display === "block") {
+                signInForm.style.display = "none";
+                signUpForm.style.display = "block";
+            } else {
+                signInForm.style.display = "block";
+                signUpForm.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div id="sign-up-form" class="container" style="display: none;">
+    <h2>Sign Up</h2>
+    <input type="email" id="signup-email" placeholder="Email">
+    <input type="password" id="signup-password" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+    <p class="message" onclick="toggleForms()">Already have an account? Sign in</p>
+</div>
+
+<div id="sign-in-form" class="container" style="display: block;">
+    <h2>Sign In</h2>
+    <input type="email" id="signin-email" placeholder="Email">
+    <input type="password" id="signin-password" placeholder="Password">
+    <button onclick="signin()">Sign In</button>
+    <p class="forgot-password" onclick="forgotPassword()">Forgot password?</p>
+    <p class="message" onclick="toggleForms()">New user? Sign up</p>
+</div>
+
 </body>
 </html>
