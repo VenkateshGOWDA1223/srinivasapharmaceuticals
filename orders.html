@@ -73,10 +73,17 @@
             color: white;
             cursor: pointer;
             margin-top: 10px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
 
         button:hover {
             background-color: #0056b3;
+            transform: scale(1.1);  /* Slightly enlarge the button */
+        }
+
+        button:active {
+            transform: scale(0.98);  /* Slightly shrink the button when clicked */
+            background-color: #003d80;  /* Darker shade when pressed */
         }
 
         .hide {
@@ -179,7 +186,7 @@
                 createdAt: new Date()
             })
             .then(() => {
-                document.getElementById('success-message').innerHTML = <p>Thank you, ${customerName}, your order has been placed successfully!</p>;
+                document.getElementById('success-message').innerHTML = `<p>Thank you, ${customerName}, your order has been placed successfully!</p>`;
                 document.getElementById('success-message').classList.remove('hide');
 
                 setTimeout(() => {
@@ -210,13 +217,13 @@
                         const order = doc.data();
                         const statusDetails = document.createElement('div');
                         statusDetails.classList.add('status-details');
-                        statusDetails.innerHTML = 
+                        statusDetails.innerHTML = `
                             <p><strong>Order for:</strong> ${order.name}</p>
                             <p><strong>Order Details:</strong> ${order.order}</p>
                             <p><strong>Status:</strong> ${order.status}</p>
                             <p><strong>Unavailable Items:</strong> ${order.unavailableItems || 'None'}</p>
                             <p><strong>Message to User:</strong> ${order.messageToUser || 'No message'}</p>
-                        ;
+                        `;
                         statusMessage.appendChild(statusDetails);
                     });
                 }
