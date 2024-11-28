@@ -99,117 +99,6 @@
             border-radius: 8px;
             background-color: #f9f9f9;
         }
-
-        /* Updated Design for Tracking Bar */
-        .tracking-container {
-            margin-top: 30px;
-            width: 100%;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .tracking-progress {
-            width: 100%;
-            height: 25px;
-            background-color: #e0e0e0;
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        .tracking-progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: #28a745;
-            border-radius: 15px;
-            position: absolute;
-            transition: width 2s ease-in-out;
-        }
-
-        .tracking-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        .tracking-labels span {
-            font-size: 14px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .tracking-status {
-            font-size: 16px;
-            text-align: center;
-            font-weight: bold;
-            color: #333;
-            margin-top: 20px;
-        }
-
-        .pending {
-            color: #f0ad4e;
-        }
-
-        .processing {
-            color: #f0ad4e;
-        }
-
-        .shipped {
-            color: #0275d8;
-        }
-
-        .completed {
-            color: #5cb85c;
-        }
-
-        .cancelled {
-            color: #d9534f;
-        }
-
-        /* Adding tick marks with animation */
-        .status-step {
-            position: relative;
-            padding-left: 30px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        .status-step::before {
-            content: '✔';
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-size: 24px;
-            color: transparent;
-            transition: color 0.5s ease-in-out;
-        }
-
-        .status-step.pending::before {
-            color: #f0ad4e;
-        }
-
-        .status-step.processing::before {
-            color: #f0ad4e;
-        }
-
-        .status-step.shipped::before {
-            color: #0275d8;
-        }
-
-        .status-step.completed::before {
-            color: #5cb85c;
-        }
-
-        .status-step.cancelled::before {
-            color: #d9534f;
-        }
-        
-        .status-step span {
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
@@ -255,24 +144,6 @@
                 <!-- Status message will be populated here -->
             </div>
         </main>
-
-        <!-- Order Tracking Section -->
-        <div id="tracking-container" class="tracking-container hide">
-            <h2>Order Tracking</h2>
-            <div class="tracking-progress">
-                <div id="tracking-progress-bar" class="tracking-progress-bar"></div>
-            </div>
-            <div class="tracking-labels">
-                <span>Pending</span>
-                <span>Processing</span>
-                <span>Shipped</span>
-                <span>Completed</span>
-                <span>Cancelled</span>
-            </div>
-            <div id="tracking-status" class="tracking-status hide">
-                <!-- Tracking status will be shown here -->
-            </div>
-        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
@@ -295,79 +166,60 @@
 
         document.getElementById('order-form').addEventListener('submit', function(e) {
             e.preventDefault();
+
             const customerName = document.getElementById('customer-name').value.trim();
             const customerEmail = document.getElementById('customer-email').value.trim();
             const orderDetails = document.getElementById('order-details').value.trim();
 
             db.collection('orders').add({
-                customerName: customerName,
+                name: customerName,
                 email: customerEmail,
-                details: orderDetails,
+                order: orderDetails,
                 status: 'Pending',
-                statusHistory: [{
-                    status: 'Pending',
-                    timestamp: new Date().toISOString()
-                }]
+                createdAt: new Date()
             })
             .then(() => {
+                document.getElementById('success-message').innerHTML = <p>Thank you, ${customerName}, your order has been placed successfully!</p>;
                 document.getElementById('success-message').classList.remove('hide');
+
+                setTimeout(() => {
+                    document.getElementById('success-message').classList.add('hide');
+                }, 5000);
+
                 document.getElementById('order-form').reset();
             })
             .catch((error) => {
-                console.error("Error placing order: ", error);
+                console.error("Error adding document: ", error);
             });
         });
 
         document.getElementById('status-form').addEventListener('submit', function(e) {
             e.preventDefault();
+
             const statusEmail = document.getElementById('status-email').value.trim();
+
             db.collection('orders').where('email', '==', statusEmail).get()
             .then((querySnapshot) => {
-                const trackingContainer = document.getElementById('tracking-container');
-                const trackingProgressBar = document.getElementById('tracking-progress-bar');
-                const trackingStatus = document.getElementById('tracking-status');
                 const statusMessage = document.getElementById('status-message');
-
+                statusMessage.innerHTML = '';
                 statusMessage.classList.remove('hide');
-                trackingContainer.classList.remove('hide');
-                trackingStatus.classList.add('hide');
-
-                querySnapshot.forEach((doc) => {
-                    const order = doc.data();
-                    const status = order.status;
-                    const statusHistory = order.statusHistory;
-
-                    let progressWidth = 0;
-                    if (status === 'Pending') {
-                        progressWidth = 20;
-                    } else if (status === 'Processing') {
-                        progressWidth = 40;
-                    } else if (status === 'Shipped') {
-                        progressWidth = 60;
-                    } else if (status === 'Completed') {
-                        progressWidth = 80;
-                    } else if (status === 'Cancelled') {
-                        progressWidth = 100;
-                    }
-
-                    trackingProgressBar.style.width = progressWidth + '%';
-                    trackingStatus.innerHTML = `<p class="tracking-status ${status.toLowerCase()}">Your order is currently: <strong>${status}</strong></p>`;
-
-                    let statusDetailsHtml = '<ul>';
-                    statusHistory.forEach((history) => {
-                        const historyDate = new Date(history.timestamp);
-                        const options = { 
-                            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', 
-                            hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'Asia/Kolkata' 
-                        };
-                        const formattedDate = historyDate.toLocaleString('en-IN', options); // IST formatted date
-                        statusDetailsHtml += `<li class="status-step ${history.status.toLowerCase()}">${history.status} on ${formattedDate}</li>`;
+                if (querySnapshot.empty) {
+                    statusMessage.innerHTML = '<p>No orders found for this email.</p>';
+                } else {
+                    querySnapshot.forEach((doc) => {
+                        const order = doc.data();
+                        const statusDetails = document.createElement('div');
+                        statusDetails.classList.add('status-details');
+                        statusDetails.innerHTML = 
+                            <p><strong>Order for:</strong> ${order.name}</p>
+                            <p><strong>Order Details:</strong> ${order.order}</p>
+                            <p><strong>Status:</strong> ${order.status}</p>
+                            <p><strong>Unavailable Items:</strong> ${order.unavailableItems || 'None'}</p>
+                            <p><strong>Message to User:</strong> ${order.messageToUser || 'No message'}</p>
+                        ;
+                        statusMessage.appendChild(statusDetails);
                     });
-                    statusDetailsHtml += '</ul>';
-
-                    document.getElementById('tracking-status').innerHTML = statusDetailsHtml;
-                    trackingStatus.classList.remove('hide');
-                });
+                }
             })
             .catch((error) => {
                 console.error("Error getting documents: ", error);
