@@ -9,129 +9,103 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: 'Arial', sans-serif;
-            background-color: #e9f2f5;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
         }
 
         .container {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             padding: 20px;
-            background-color: #f8f9fa;
+            flex-direction: column;
         }
 
         main {
             background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 600px;
             margin-bottom: 20px;
-            text-align: center;
         }
 
         .logo-container img {
             display: block;
-            margin: 0 auto 20px;
+            margin: 0 auto;
             width: 50%;
-            max-width: 150px;
+            max-width: 200px;
         }
 
-        h1 {
-            font-size: 24px;
-            color: #333;
+        .video-container {
+            width: 100%;
+            max-width: 600px;
             margin-bottom: 20px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
+            margin-bottom: 5px;
         }
 
         .form-group input[type="text"],
         .form-group input[type="email"],
         .form-group textarea {
             width: 100%;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 8px;
+            border-radius: 4px;
             border: 1px solid #ccc;
             box-sizing: border-box;
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input[type="text"]:focus,
-        .form-group input[type="email"]:focus,
-        .form-group textarea:focus {
-            border-color: #007bff;
-            outline: none;
         }
 
         button {
             width: 100%;
-            padding: 14px;
+            padding: 10px;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             background-color: #007bff;
             color: white;
             cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s ease;
+            margin-top: 10px;
         }
 
         button:hover {
             background-color: #0056b3;
         }
 
-        #success-message {
-            padding: 15px;
-            background-color: #d4edda;
-            color: #155724;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-size: 18px;
+        .hide {
+            display: none;
         }
 
-        #status-message {
-            padding: 15px;
-            background-color: #f8d7da;
-            color: #721c24;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-size: 18px;
+        #success-message {
+            text-align: center;
+            padding: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border-radius: 4px;
+            margin-top: 20px;
         }
 
         .status-details {
             margin-top: 20px;
             border: 1px solid #ccc;
-            padding: 15px;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 8px;
             background-color: #f9f9f9;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .status-details p {
-            margin: 8px 0;
-            font-size: 16px;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <!-- Order Form Section -->
+        <div class="video-container">
+            <!-- Removed video tag -->
+        </div>
         <main>
             <div class="logo-container">
                 <img src="images/srinivasawelcome.jpg" alt="Company Logo">
@@ -157,7 +131,6 @@
             </div>
         </main>
 
-        <!-- Order Status Check Section -->
         <main>
             <h1>Check Order Status</h1>
             <form id="status-form">
@@ -176,7 +149,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
     <script>
-        // Your Firebase configuration
+        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBV3grYDi6UvOhRHxBIFfge59hGTyoBawI",
             authDomain: "orders-1abed.firebaseapp.com",
@@ -188,11 +161,12 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        // Initialize Firestore
         const db = firebase.firestore();
 
-        // Place Order
         document.getElementById('order-form').addEventListener('submit', function(e) {
             e.preventDefault();
+
             const customerName = document.getElementById('customer-name').value.trim();
             const customerEmail = document.getElementById('customer-email').value.trim();
             const orderDetails = document.getElementById('order-details').value.trim();
@@ -205,11 +179,13 @@
                 createdAt: new Date()
             })
             .then(() => {
-                document.getElementById('success-message').innerHTML = `<p>Thank you, ${customerName}, your order has been placed successfully!</p>`;
+                document.getElementById('success-message').innerHTML = <p>Thank you, ${customerName}, your order has been placed successfully!</p>;
                 document.getElementById('success-message').classList.remove('hide');
+
                 setTimeout(() => {
                     document.getElementById('success-message').classList.add('hide');
                 }, 5000);
+
                 document.getElementById('order-form').reset();
             })
             .catch((error) => {
@@ -217,9 +193,9 @@
             });
         });
 
-        // Check Order Status
         document.getElementById('status-form').addEventListener('submit', function(e) {
             e.preventDefault();
+
             const statusEmail = document.getElementById('status-email').value.trim();
 
             db.collection('orders').where('email', '==', statusEmail).get()
@@ -234,13 +210,13 @@
                         const order = doc.data();
                         const statusDetails = document.createElement('div');
                         statusDetails.classList.add('status-details');
-                        statusDetails.innerHTML = `
+                        statusDetails.innerHTML = 
                             <p><strong>Order for:</strong> ${order.name}</p>
                             <p><strong>Order Details:</strong> ${order.order}</p>
                             <p><strong>Status:</strong> ${order.status}</p>
                             <p><strong>Unavailable Items:</strong> ${order.unavailableItems || 'None'}</p>
                             <p><strong>Message to User:</strong> ${order.messageToUser || 'No message'}</p>
-                        `;
+                        ;
                         statusMessage.appendChild(statusDetails);
                     });
                 }
