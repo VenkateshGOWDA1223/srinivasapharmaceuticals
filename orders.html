@@ -1,237 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pharmacy Online Order</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharmacy Online Order</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background-color: #f4f7f9; color: #333; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            padding: 20px;
-            flex-direction: column;
-        }
+    .container { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
 
-        main {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 20px;
-        }
+    .card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 600px;
+        padding: 30px 25px;
+        margin-bottom: 40px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
 
-        .logo-container img {
-            display: block;
-            margin: 0 auto;
-            width: 50%;
-            max-width: 200px;
-        }
+    .logo-container { text-align: center; margin-bottom: 20px; }
+    .logo-container img { width: 150px; max-width: 150px; border-radius: 10px; }
 
-        .video-container {
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 20px;
-        }
+    h1 { text-align: center; color: #00796b; margin-bottom: 25px; }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+    form { display: flex; flex-direction: column; gap: 15px; }
+    label { font-weight: bold; margin-bottom: 5px; }
+    input[type="text"], input[type="email"], textarea {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        width: 100%;
+        transition: border-color 0.3s;
+    }
+    input:focus, textarea:focus { border-color: #00796b; outline: none; }
+    textarea { resize: vertical; min-height: 80px; }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
+    button {
+        background-color: #00796b;
+        color: #fff;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+    }
+    button:hover { background-color: #004d40; transform: scale(1.05); }
+    button:active { transform: scale(0.98); }
 
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group textarea {
-            width: 100%;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
+    #success-message, #status-message { display: none; margin-top: 15px; border-radius: 6px; padding: 12px; }
+    #success-message { background-color: #d4edda; color: #155724; }
+    .status-details { border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9; padding: 15px; margin-bottom: 15px; }
 
-        button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-            transform: scale(1.1);  /* Slightly enlarge the button */
-        }
-
-        button:active {
-            transform: scale(0.98);  /* Slightly shrink the button when clicked */
-            background-color: #003d80;  /* Darker shade when pressed */
-        }
-
-        .hide {
-            display: none;
-        }
-
-        #success-message {
-            text-align: center;
-            padding: 10px;
-            background-color: #d4edda;
-            color: #155724;
-            border-radius: 4px;
-            margin-top: 20px;
-        }
-
-        .status-details {
-            margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
-    </style>
+    @media (max-width: 768px) { .card { padding: 25px 20px; } .logo-container img { width: 120px; } }
+    @media (max-width: 480px) { h1 { font-size: 1.5rem; } button { font-size: 0.95rem; } }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="video-container">
-            <!-- Removed video tag -->
-        </div>
-        <main>
-            <div class="logo-container">
-                <img src="images/srinivasawelcome.jpg" alt="Company Logo">
-            </div>
-            <h1>Place Your Order</h1>
-            <form id="order-form">
-                <div class="form-group">
-                    <label for="customer-name">Your Shop Name:</label>
-                    <input type="text" id="customer-name" required>
-                </div>
-                <div class="form-group">
-                    <label for="customer-email">Your Gmail ID:</label>
-                    <input type="email" id="customer-email" required>
-                </div>
-                <div class="form-group">
-                    <label for="order-details">Order Details:</label>
-                    <textarea id="order-details" placeholder="e.g., 2 boxes of Medicine A" required></textarea>
-                </div>
-                <button type="submit">Place Order</button>
-            </form>
-            <div id="success-message" class="hide">
-                <p>Order Placed Successfully!</p>
-            </div>
-        </main>
+<div class="container">
 
-        <main>
-            <h1>Check Order Status</h1>
-            <form id="status-form">
-                <div class="form-group">
-                    <label for="status-email">Your Gmail ID:</label>
-                    <input type="email" id="status-email" required>
-                </div>
-                <button type="submit">Check Status</button>
-            </form>
-            <div id="status-message" class="hide">
-                <!-- Status message will be populated here -->
+    <!-- Place Order Card -->
+    <div class="card">
+        <div class="logo-container">
+            <img src="images/srinivasawelcome.jpg" alt="Company Logo">
+        </div>
+        <h1>Place Your Order</h1>
+        <form id="order-form">
+            <div class="form-group">
+                <label for="customer-name">Your Shop Name:</label>
+                <input type="text" id="customer-name" placeholder="Enter shop name" required>
             </div>
-        </main>
+            <div class="form-group">
+                <label for="customer-email">Your Gmail ID:</label>
+                <input type="email" id="customer-email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="order-details">Order Details:</label>
+                <textarea id="order-details" placeholder="e.g., 2 boxes of Medicine A" required></textarea>
+            </div>
+            <button type="submit">Place Order</button>
+        </form>
+        <div id="success-message"></div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
-    <script>
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBV3grYDi6UvOhRHxBIFfge59hGTyoBawI",
-            authDomain: "orders-1abed.firebaseapp.com",
-            projectId: "orders-1abed",
-            storageBucket: "orders-1abed.appspot.com",
-            messagingSenderId: "559549966240",
-            appId: "1:559549966240:web:12cd579400ac1310b726c5"
-        };
+    <!-- Check Status Card -->
+    <div class="card">
+        <h1>Check Order Status</h1>
+        <form id="status-form">
+            <div class="form-group">
+                <label for="status-email">Your Gmail ID:</label>
+                <input type="email" id="status-email" placeholder="Enter your email" required>
+            </div>
+            <button type="submit">Check Status</button>
+        </form>
+        <div id="status-message"></div>
+    </div>
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        // Initialize Firestore
-        const db = firebase.firestore();
+    <!-- Check Stock Availability Card -->
+    <div class="card">
+        <h1>Check Stock Availability</h1>
+        <a href="stocks.html"><button type="button">Check Stock Availability</button></a>
+    </div>
 
-        document.getElementById('order-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+</div>
 
-            const customerName = document.getElementById('customer-name').value.trim();
-            const customerEmail = document.getElementById('customer-email').value.trim();
-            const orderDetails = document.getElementById('order-details').value.trim();
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyBV3grYDi6UvOhRHxBIFfge59hGTyoBawI",
+    authDomain: "orders-1abed.firebaseapp.com",
+    projectId: "orders-1abed",
+    storageBucket: "orders-1abed.appspot.com",
+    messagingSenderId: "559549966240",
+    appId: "1:559549966240:web:12cd579400ac1310b726c5"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-            db.collection('orders').add({
-                name: customerName,
-                email: customerEmail,
-                order: orderDetails,
-                status: 'Pending',
-                createdAt: new Date()
-            })
-            .then(() => {
-                document.getElementById('success-message').innerHTML = `<p>Thank you, ${customerName}, your order has been placed successfully!</p>`;
-                document.getElementById('success-message').classList.remove('hide');
+// Place order
+document.getElementById('order-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('customer-name').value.trim();
+    const email = document.getElementById('customer-email').value.trim();
+    const order = document.getElementById('order-details').value.trim();
 
-                setTimeout(() => {
-                    document.getElementById('success-message').classList.add('hide');
-                }, 5000);
+    db.collection('orders').add({ name, email, order, status:'Pending', createdAt: new Date() })
+    .then(() => {
+        const msg = document.getElementById('success-message');
+        msg.innerHTML = `<p>Thank you, ${name}, your order has been placed successfully!</p>`;
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 5000);
+        document.getElementById('order-form').reset();
+    }).catch(err => console.error(err));
+});
 
-                document.getElementById('order-form').reset();
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
+// Check order status
+document.getElementById('status-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('status-email').value.trim();
+    const statusDiv = document.getElementById('status-message');
+    statusDiv.innerHTML = '';
+    statusDiv.style.display = 'block';
+
+    db.collection('orders').where('email','==',email).get()
+    .then(snapshot => {
+        if(snapshot.empty) statusDiv.innerHTML = '<p>No orders found for this email.</p>';
+        else snapshot.forEach(doc => {
+            const order = doc.data();
+            const div = document.createElement('div');
+            div.classList.add('status-details');
+            div.innerHTML = `
+                <p><strong>Order for:</strong> ${order.name}</p>
+                <p><strong>Order Details:</strong> ${order.order}</p>
+                <p><strong>Status:</strong> ${order.status}</p>
+                <p><strong>Unavailable Items:</strong> ${order.unavailableItems || 'None'}</p>
+                <p><strong>Message to User:</strong> ${order.messageToUser || 'No message'}</p>
+            `;
+            statusDiv.appendChild(div);
         });
-
-        document.getElementById('status-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const statusEmail = document.getElementById('status-email').value.trim();
-
-            db.collection('orders').where('email', '==', statusEmail).get()
-            .then((querySnapshot) => {
-                const statusMessage = document.getElementById('status-message');
-                statusMessage.innerHTML = '';
-                statusMessage.classList.remove('hide');
-                if (querySnapshot.empty) {
-                    statusMessage.innerHTML = '<p>No orders found for this email.</p>';
-                } else {
-                    querySnapshot.forEach((doc) => {
-                        const order = doc.data();
-                        const statusDetails = document.createElement('div');
-                        statusDetails.classList.add('status-details');
-                        statusDetails.innerHTML = `
-                            <p><strong>Order for:</strong> ${order.name}</p>
-                            <p><strong>Order Details:</strong> ${order.order}</p>
-                            <p><strong>Status:</strong> ${order.status}</p>
-                            <p><strong>Unavailable Items:</strong> ${order.unavailableItems || 'None'}</p>
-                            <p><strong>Message to User:</strong> ${order.messageToUser || 'No message'}</p>
-                        `;
-                        statusMessage.appendChild(statusDetails);
-                    });
-                }
-            })
-            .catch((error) => {
-                console.error("Error getting documents: ", error);
-            });
-        });
-    </script>
+    }).catch(err => console.error(err));
+});
+</script>
 </body>
 </html>
